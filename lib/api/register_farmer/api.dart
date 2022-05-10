@@ -12,13 +12,14 @@ abstract class RegisterFarmerAbstractService {
     required String constituencyId,
   });
   Future<Farmer> getFarmer({required String? id});
-  Future<List<Farmer>> getFarmers({required String enumeratorId});
+  Future<List<Farmer>> getFarmers({required int enumeratorId});
   Future<String> registerFarmer({required Map<String, dynamic> body});
   Future<String> updateFarmer({required Map<String, dynamic> body});
 }
 
 class RegisterFarmerService extends RegisterFarmerAbstractService {
-  final String domain = "http://localhost:4000/api";
+  // final String domain = "http://localhost:4000/api";
+  final String domain = "http://survey.esnaufis.org/api";
   Helpers helper = Helpers();
 
   @override
@@ -148,33 +149,32 @@ class RegisterFarmerService extends RegisterFarmerAbstractService {
   }
 
   @override
-  Future<List<Farmer>> getFarmers({required String enumeratorId}) async {
-    Uri uri = Uri.parse(domain + '');
+  Future<List<Farmer>> getFarmers({required int enumeratorId}) async {
+    Uri uri = Uri.parse(domain +
+        '/enumerator/$enumeratorId/farmer_list_table/Esnau_employee_id');
 
-    return getFarmerList();
+    try {
+      http.Response response = await http.get(uri, headers: helper.headers);
+      print(response.body);
 
-    // try {
-    //   http.Response response = await http.get(uri, headers: helper.headers);
-    //   print(response.body);
+      if (response.statusCode == 200) {
+        Map res = json.decode(response.body);
 
-    //   if (response.statusCode == 200) {
-    //     Map res = json.decode(response.body);
+        if (res['success'] == 1) {
+          List data = res['data'];
+          return data.map((e) => Farmer.fromJson(e)).toList();
+        } else {
+          throw Exception('Error occurred while getting farmer list.');
+        }
+      } else {
+        print('Inside this guy.');
 
-    //     if (res['success'] == 1) {
-    //       List data = res['farmers'];
-    //       return data.map((e) => Farmer.fromJson(e)).toList();
-    //     } else {
-    //       throw Exception('Error occurred while getting farmer list.');
-    //     }
-    //   } else {
-    //     print('Inside this guy.');
-
-    //     // Map res = json.decode(response.body);
-    //     // throw Exception(res['message'].toString());
-    //   }
-    // } catch (err) {
-    //   throw Exception(err.toString().replaceAll('Exception:', ''));
-    // }
+        Map res = json.decode(response.body);
+        throw Exception(res['message'].toString());
+      }
+    } catch (err) {
+      throw Exception(err.toString().replaceAll('Exception:', ''));
+    }
   }
 
   @override

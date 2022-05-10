@@ -18,6 +18,7 @@ class _LoginState extends State<LoginView> {
   final GlobalKey<FormState> _emailKey = GlobalKey<FormState>();
   AccessService service = AccessService();
   Helpers helper = Helpers();
+  bool loading = false;
 
   @override
   void initState() {
@@ -230,48 +231,61 @@ class _LoginState extends State<LoginView> {
                         textColor: Colors.white,
                         color: const Color.fromRGBO(17, 68, 131, 1),
                         onPressed: () {
+                          setState(() {
+                            loading = true;
+                          });
                           if (_emailKey.currentState!.validate()) {
-                            Navigator.pushReplacement(
-                                context,
-                                PageTransition(
-                                    child: EnumeratorHomeView(
-                                        user: User(
-                                      id: -1,
-                                      nationalId: '9607196100302',
-                                      name: 'Fanelesibonge',
-                                      surname: 'Malaza',
-                                      phone: '78221507',
-                                      email: 'malazafanelesibonge@gmail.com ',
-                                      gender: 'Male',
-                                      designation: 'Enumerator',
-                                      organization: 2,
-                                      level: 2,
-                                      verificationCode: "",
-                                      status: "active",
-                                    )),
-                                    type: PageTransitionType
-                                        .rightToLeftWithFade));
+                            // Navigator.pushReplacement(
+                            //     context,
+                            //     PageTransition(
+                            //         child: EnumeratorHomeView(
+                            //             user: User(
+                            //           id: -1,
+                            //           nationalId: '9607196100302',
+                            //           name: 'Fanelesibonge',
+                            //           surname: 'Malaza',
+                            //           phone: '78221507',
+                            //           email: 'malazafanelesibonge@gmail.com ',
+                            //           gender: 'Male',
+                            //           designation: 'Enumerator',
+                            //           organization: 2,
+                            //           level: 2,
+                            //           verificationCode: "",
+                            //           status: "active",
+                            //         )),
+                            //         type: PageTransitionType
+                            //             .rightToLeftWithFade));
 
                             // TODO: service
-                            //     .loginRequest(
-                            //         email: email.text, password: password.text)
-                            //     .then((String message) {
-                            //   helper.buildSnackBar(
-                            //       context, message, Colors.green);
+                            service
+                                .loginRequest(
+                                    email: email.text, password: password.text)
+                                .then((Map<String, dynamic> res) {
+                              helper.buildSnackBar(
+                                  context, res['message'], Colors.green);
 
-                            //   Navigator.pushReplacement(
-                            //       context,
-                            //       PageTransition(
-                            //           child: const EnumeratorHomeView(),
-                            //           type: PageTransitionType
-                            //               .rightToLeftWithFade));
-                            // }).catchError((err) {
-                            //   helper.buildSnackBar(
-                            //     context,
-                            //     err.toString().replaceAll("Exception:", ''),
-                            //     Colors.red.shade600,
-                            //   );
-                            // });
+                              setState(() {
+                                loading = false;
+                              });
+
+                              Navigator.pushReplacement(
+                                  context,
+                                  PageTransition(
+                                      child: EnumeratorHomeView(
+                                        user: res['user'],
+                                      ),
+                                      type: PageTransitionType
+                                          .rightToLeftWithFade));
+                            }).catchError((err) {
+                              setState(() {
+                                loading = false;
+                              });
+                              helper.buildSnackBar(
+                                context,
+                                err.toString().replaceAll("Exception:", ''),
+                                Colors.red.shade600,
+                              );
+                            });
                           }
                         },
                         padding: EdgeInsets.only(
@@ -290,6 +304,17 @@ class _LoginState extends State<LoginView> {
                             fontSize: 17,
                           ),
                         ),
+                      ),
+                      const SizedBox(height: 25),
+
+                      SizedBox(
+                        child: Visibility(
+                          visible: loading,
+                          child: const LinearProgressIndicator(
+                            color: Color.fromRGBO(17, 68, 131, 1),
+                          ),
+                        ),
+                        width: width * .65,
                       ),
                       const SizedBox(height: 40),
 

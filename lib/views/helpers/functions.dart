@@ -266,6 +266,7 @@ class Helpers {
                       context,
                       MaterialPageRoute(
                         builder: (context) => ViewSurveyListScreen(
+                          viewSurvey: true,
                           survey: survey,
                         ),
                       ),
@@ -303,6 +304,16 @@ class Helpers {
                   ),
                   onPressed: () {
                     // TODO : go to take survey view
+
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ViewSurveyListScreen(
+                          viewSurvey: false,
+                          survey: survey,
+                        ),
+                      ),
+                    );
                   },
                 ),
               ),

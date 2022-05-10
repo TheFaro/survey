@@ -19,7 +19,7 @@ class _ViewFarmersListState extends State<ViewFarmersListView> {
   @override
   void initState() {
     super.initState();
-    _farmers = service.getFarmers(enumeratorId: "enumeratorId");
+    _farmers = service.getFarmers(enumeratorId: 4);
     _farmers!.catchError((err) {
       helper.buildSnackBar(
         context,

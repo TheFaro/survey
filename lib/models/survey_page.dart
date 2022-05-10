@@ -40,128 +40,146 @@ class SurveyPage {
     required bool viewing,
   }) {
     double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
 
-    return SafeArea(
-      child: SingleChildScrollView(
-        child: SizedBox(
-          width: width,
-          child: FutureBuilder<List<PageInputs>>(
-              future: futureInputs,
-              builder: (context, snapshot) {
-                switch (snapshot.connectionState) {
-                  case ConnectionState.none:
-                    break;
-                  case ConnectionState.waiting:
-                    return const Center(
-                      child: CircularProgressIndicator(
-                        color: Color.fromRGBO(17, 68, 131, 1),
-                        strokeWidth: 2,
-                      ),
-                    );
-                  case ConnectionState.active:
-                    break;
-                  case ConnectionState.done:
-                    if (snapshot.hasData) {
-                      List<PageInputs> inputs = snapshot.data!;
+    print("We are about to build.");
+    return SingleChildScrollView(
+      child: SizedBox(
+        width: width,
+        child: FutureBuilder<List<PageInputs>>(
+            future: futureInputs,
+            builder: (context, snapshot) {
+              switch (snapshot.connectionState) {
+                case ConnectionState.none:
+                  break;
+                case ConnectionState.waiting:
+                  return SizedBox(
+                      width: width,
+                      height: height,
+                      child: const Center(
+                        child: CircularProgressIndicator(
+                          color: Color.fromRGBO(17, 68, 131, 1),
+                          strokeWidth: 2,
+                        ),
+                      ));
+                case ConnectionState.active:
+                  break;
+                case ConnectionState.done:
+                  if (snapshot.hasData) {
+                    print('Inside has data \n');
+                    List<PageInputs> inputs = snapshot.data!;
 
-                      // create listview object
-                      return ListView.builder(
-                          shrinkWrap: true,
-                          primary: false,
-                          itemCount: inputs.length,
-                          itemBuilder: (context, index) {
-                            PageInputs input = inputs[index];
+                    // create listview object
+                    return ListView.builder(
+                        shrinkWrap: true,
+                        primary: false,
+                        itemCount: inputs.length,
+                        itemBuilder: (context, index) {
+                          PageInputs input = inputs[index];
 
-                            if (viewing) {
-                              // check type condition for creating required input.
-                              return Center(
-                                child: input.type == 'text'
-                                    ? helper.buildDataView(
-                                        context: context,
-                                        label: input.label,
-                                        data: input.data == null
-                                            ? ""
-                                            : input.data!)
-                                    : input.type == 'number'
-                                        ? helper.buildDataView(
-                                            context: context,
-                                            label: input.label,
-                                            data: input.data == null
-                                                ? ""
-                                                : input.data!)
-                                        : input.type == 'date'
-                                            ? helper.buildDataView(
-                                                context: context,
-                                                label: input.label,
-                                                data: input.data == null
-                                                    ? ""
-                                                    : input.data!)
-                                            : input.type == 'textarea'
-                                                ? helper.buildDataView(
-                                                    context: context,
-                                                    label: input.label,
-                                                    data: input.data == null
-                                                        ? ""
-                                                        : input.data!)
-                                                : const Padding(
-                                                    padding: EdgeInsets.all(20),
-                                                    child: Text(
-                                                      'Do not know this input type.',
+                          if (viewing) {
+                            // check type condition for creating required input.
+                            return Column(
+                              children: [
+                                const SizedBox(height: 25),
+                                Center(
+                                  child: input.type == 'text'
+                                      ? helper.buildDataView(
+                                          context: context,
+                                          label: input.label,
+                                          data: input.data == null
+                                              ? ""
+                                              : input.data!)
+                                      : input.type == 'number'
+                                          ? helper.buildDataView(
+                                              context: context,
+                                              label: input.label,
+                                              data: input.data == null
+                                                  ? ""
+                                                  : input.data!)
+                                          : input.type == 'date'
+                                              ? helper.buildDataView(
+                                                  context: context,
+                                                  label: input.label,
+                                                  data: input.data == null
+                                                      ? ""
+                                                      : input.data!)
+                                              : input.type == 'textarea'
+                                                  ? helper.buildDataView(
+                                                      context: context,
+                                                      label: input.label,
+                                                      data: input.data == null
+                                                          ? ""
+                                                          : input.data!)
+                                                  : const Padding(
+                                                      padding:
+                                                          EdgeInsets.all(20),
+                                                      child: Text(
+                                                        'Do not know this input type.',
+                                                      ),
                                                     ),
-                                                  ),
-                              );
-                            } else {
-                              // check type condition for creating required input.
-                              return Center(
-                                child: input.type == 'text'
-                                    ? input.buildSingleInput(context: context)
-                                    : input.type == 'number'
-                                        ? input.buildNumberInput(
-                                            context: context)
-                                        : input.type == 'date'
-                                            ? input.buildDateInput(
-                                                context: context)
-                                            : input.type == 'textarea'
-                                                ? input.buildTextAreaInput(
-                                                    context: context)
-                                                : const Padding(
-                                                    padding: EdgeInsets.all(20),
-                                                    child: Text(
-                                                      'Do not know this input type.',
+                                )
+                              ],
+                            );
+                          } else {
+                            // check type condition for creating required input.
+                            return Column(
+                              children: [
+                                const SizedBox(
+                                  height: 25,
+                                ),
+                                Center(
+                                  child: input.type == 'text'
+                                      ? input.buildSingleInput(context: context)
+                                      : input.type == 'number'
+                                          ? input.buildNumberInput(
+                                              context: context)
+                                          : input.type == 'date'
+                                              ? input.buildDateInput(
+                                                  context: context)
+                                              : input.type == 'textarea'
+                                                  ? input.buildTextAreaInput(
+                                                      context: context)
+                                                  : const Padding(
+                                                      padding:
+                                                          EdgeInsets.all(20),
+                                                      child: Text(
+                                                        'Do not know this input type.',
+                                                      ),
                                                     ),
-                                                  ),
-                              );
-                            }
-                          });
-                    } else {
-                      return Center(
-                        child: Padding(
-                          padding: const EdgeInsets.all(20),
-                          child: Text(
-                            snapshot.error
-                                .toString()
-                                .replaceAll('Exception:', ''),
-                            style: TextStyle(
-                              color: Colors.red.shade600,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18,
-                            ),
+                                )
+                              ],
+                            );
+                          }
+                        });
+                  } else {
+                    return Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(20),
+                        child: Text(
+                          snapshot.error
+                              .toString()
+                              .replaceAll('Exception:', ''),
+                          style: TextStyle(
+                            color: Colors.red.shade600,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
                           ),
                         ),
-                      );
-                    }
-                }
+                      ),
+                    );
+                  }
+              }
 
-                return const Center(
-                  child: Padding(
-                    padding: EdgeInsets.all(20),
-                    child: Text(
-                      'An error occurred. Please reload.',
-                    ),
+              return const Center(
+                child: Padding(
+                  padding: EdgeInsets.all(20),
+                  child: Text(
+                    'An error occurred. Please reload.',
                   ),
-                );
-              }),
-        ),
+                ),
+              );
+            }),
       ),
     );
   }

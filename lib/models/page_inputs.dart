@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
 class PageInputs {
@@ -99,6 +100,9 @@ class PageInputs {
       width: width * .7,
       child: TextFormField(
         keyboardType: TextInputType.number,
+        inputFormatters: <TextInputFormatter>[
+          FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+        ],
         onChanged: (String? value) {
           data = value;
         },
@@ -106,6 +110,11 @@ class PageInputs {
           labelText: label,
           labelStyle: const TextStyle(
             color: Color.fromRGBO(17, 68, 131, 1),
+          ),
+          helperText: 'Enter numbers only!',
+          helperStyle: TextStyle(
+            color: Colors.grey.shade600,
+            fontWeight: FontWeight.w700,
           ),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(5),

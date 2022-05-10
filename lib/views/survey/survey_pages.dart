@@ -21,7 +21,7 @@ class _SurveyPagesViewState extends State<SurveyPagesView> {
   Helpers helper = Helpers();
   SurveyService service = SurveyService();
 
-  PageController? controller;
+  late PageController controller;
   double scroll = 0;
   int counter = 0;
   int pageIndex = 0;
@@ -31,10 +31,20 @@ class _SurveyPagesViewState extends State<SurveyPagesView> {
   String currentPage = "";
 
   @override
+  void initState() {
+    super.initState();
+
+    print('We have been initiated.');
+
+    controller = PageController(initialPage: 0);
+  }
+
+  @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
 
+    print('We are beginning our creation process.');
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -103,13 +113,13 @@ class _SurveyPagesViewState extends State<SurveyPagesView> {
                               });
 
                               scroll = scroll - width;
-                              controller!.animateTo(
+                              controller.animateTo(
                                 scroll,
                                 duration: const Duration(milliseconds: 700),
                                 curve: Curves.easeIn,
                               );
 
-                              Navigator.pop(context);
+                              //Navigator.pop(context);
                             }
                           },
                           shape: RoundedRectangleBorder(
@@ -125,13 +135,13 @@ class _SurveyPagesViewState extends State<SurveyPagesView> {
                             children: const [
                               Icon(
                                 Icons.arrow_back,
-                                color: Colors.black38,
+                                color: Colors.black87,
                               ),
                               Text(
                                 'Back',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
-                                  color: Colors.black38,
+                                  color: Colors.black87,
                                   fontSize: 18,
                                 ),
                               ),
@@ -167,7 +177,7 @@ class _SurveyPagesViewState extends State<SurveyPagesView> {
                               });
 
                               scroll = scroll + width;
-                              controller!.animateTo(
+                              controller.animateTo(
                                 scroll,
                                 duration: const Duration(milliseconds: 700),
                                 curve: Curves.easeIn,
@@ -223,12 +233,22 @@ class _SurveyPagesViewState extends State<SurveyPagesView> {
       width: width,
       height: height,
       child: PageView.builder(
-          controller: controller!,
+          controller: controller,
           scrollDirection: Axis.horizontal,
           itemCount: widget.survey.pages!.length,
           physics: const NeverScrollableScrollPhysics(),
           itemBuilder: (context, index) {
             SurveyPage page = widget.survey.pages![index];
+
+            if (page.futureInputs == null) {
+              page.futureInputs = service.getPageInputs(
+                pageId: page.id,
+              );
+
+              print('Future page inputs is null.');
+            } else {
+              print('Future page inputs is null.');
+            }
 
             return SingleChildScrollView(
               physics: const BouncingScrollPhysics(),

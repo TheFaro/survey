@@ -1,3 +1,5 @@
+import 'package:snau_survey/models/sqlite/farmer_db.dart';
+
 class Farmer {
   final int id;
   final String nationalId;
@@ -257,4 +259,49 @@ class Farmer {
             ? ""
             : json['record_status'].toString(),
       );
+
+  Map<String, dynamic> toMap() => {
+        FarmerDBHelper.columnId: id,
+        FarmerDBHelper.columnNationalId: nationalId,
+        FarmerDBHelper.columnName: name,
+        FarmerDBHelper.columnSecondName: secondName,
+        FarmerDBHelper.columnSurname: surname,
+        FarmerDBHelper.columnGender: gender,
+        FarmerDBHelper.columnDOB: DOB,
+        FarmerDBHelper.columnPhoneNumber: phone,
+        FarmerDBHelper.columnNextOfKin: nextOfKinPhone,
+        FarmerDBHelper.columnEmailAddress: email,
+        FarmerDBHelper.columnMaritalStatus: maritalStatus,
+        FarmerDBHelper.columnLevelOfEducation: education,
+        FarmerDBHelper.columnRegion: region,
+        FarmerDBHelper.columnNearestRDA: nearestRDA,
+        FarmerDBHelper.columnConstituency: constituency,
+        FarmerDBHelper.columnUmphakatsi: umphakatsi,
+        FarmerDBHelper.columnAgroEcologicalZone: agroZone,
+        FarmerDBHelper.columnHouseSize: houseSize,
+        FarmerDBHelper.columnOvcs: ovcs,
+        FarmerDBHelper.columnLivelihood: sourceOfLivelihood,
+        FarmerDBHelper.columnIncome: sourceOfIncome,
+        FarmerDBHelper.columnFood: sourceOfFood,
+        FarmerDBHelper.columnAvgIncome: avgMonthlyIncome,
+        FarmerDBHelper.columnAvgExpenditure: avgMonthlyExpenditure,
+        FarmerDBHelper.columnBankAcc: bankAcc,
+        FarmerDBHelper.columnMobileBank: mobileBank,
+        FarmerDBHelper.columnAccessToFunds: accessToFunds,
+        FarmerDBHelper.columnMembershipNum: membershipNumber,
+        FarmerDBHelper.columnCardNum: cardNumber,
+        FarmerDBHelper.columnEsnauMember: esnauMember,
+        FarmerDBHelper.columnAffiliation: affiliation,
+        FarmerDBHelper.columnCooperative: cooperatives,
+        FarmerDBHelper.columnAssociation: association,
+        FarmerDBHelper.columnLandOwned: landOwned,
+        FarmerDBHelper.columnLandProduction: productionLand,
+        FarmerDBHelper.columnLeasedLand: leasedLand,
+        FarmerDBHelper.columnTotalLand: totalLand,
+        FarmerDBHelper.columnAddress: address,
+        FarmerDBHelper.columnCaptureDate: captureDate.toString(),
+        FarmerDBHelper.columnNearestTown: nearestTown,
+        FarmerDBHelper.columnProfileImage: profileImage,
+        FarmerDBHelper.columnRecordStatus: recordStatus,
+      };
 }

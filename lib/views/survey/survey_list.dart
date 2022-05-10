@@ -22,7 +22,7 @@ class _SurveyListViewState extends State<SurveyListView> {
     super.initState();
 
     _surveys = service.getSurveyList(
-        module: widget.user.level == 2 ? 'enumerator' : 'bsp');
+        module: widget.user.level == 1 ? 'enumerator' : 'bsp');
 
     _surveys!.then((value) {
       if (value.isNotEmpty) {

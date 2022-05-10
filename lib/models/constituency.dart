@@ -1,3 +1,5 @@
+import 'package:snau_survey/models/sqlite/constituency.dart';
+
 class Constituency {
   final int inkhundlaId;
   final String inkhundlaCode;
@@ -28,4 +30,11 @@ class Constituency {
                 ? ""
                 : json['inkhundla'].toString(),
       );
+
+  Map<String, dynamic> toMap() => {
+        ConstituencyDBHelper.columnInkhundlaId: inkhundlaId,
+        ConstituencyDBHelper.columnInkhundlaCode: inkhundlaCode,
+        ConstituencyDBHelper.columnRegion: region,
+        ConstituencyDBHelper.columnInkhundla: inkhundla,
+      };
 }
