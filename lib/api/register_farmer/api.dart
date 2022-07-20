@@ -15,26 +15,62 @@ abstract class RegisterFarmerAbstractService {
   Future<List<Farmer>> getFarmers({required int enumeratorId});
   Future<String> registerFarmer({required Map<String, dynamic> body});
   Future<String> updateFarmer({required Map<String, dynamic> body});
+
+  // local functions
+  List<RDA> filterList(String selectedRegion, List<RDA> list);
+  List<Constituency> filterConstituency(String region, List<Constituency> list);
 }
 
 class RegisterFarmerService extends RegisterFarmerAbstractService {
   // final String domain = "http://localhost:4000/api";
   final String domain = "http://survey.esnaufis.org/api";
+  // final String domain = "http://backend.esnaufis.org/api"; // live server
   Helpers helper = Helpers();
+
+  @override
+  List<RDA> filterList(
+    String selectedRegion,
+    List<RDA> list,
+  ) {
+    List<RDA> result = [];
+
+    for (int i = 0; i < list.length; i++) {
+      RDA rda = list[i];
+
+      if (rda.region == selectedRegion) {
+        result.add(rda);
+      }
+    }
+
+    return result;
+  }
+
+  @override
+  List<Constituency> filterConstituency(
+    String region,
+    List<Constituency> list,
+  ) {
+    List<Constituency> result = [];
+
+    for (int i = 0; i < list.length; i++) {
+      Constituency temp = list[i];
+
+      if (temp.region == region.toLowerCase()) {
+        result.add(temp);
+      }
+    }
+
+    return result;
+  }
 
   @override
   Future<List<RDA>> getNearestRDA({
     required String region,
   }) async {
-    Uri uri = Uri.parse(domain + '');
-
-    Map<String, dynamic> body = {
-      "region": region.toLowerCase(),
-    };
+    Uri uri = Uri.parse(domain + '/general/nationalrda');
 
     try {
-      http.Response response = await http.post(uri,
-          headers: helper.headers, body: json.encode(body));
+      http.Response response = await http.get(uri, headers: helper.headers);
       print(response.body);
 
       if (response.statusCode == 200) {
@@ -43,7 +79,12 @@ class RegisterFarmerService extends RegisterFarmerAbstractService {
         if (res['success'] == 1) {
           List list = res['data'];
 
-          return list.map((item) => RDA.fromJson(item)).toList();
+          print('Inside success response.');
+
+          return filterList(
+            region.toLowerCase(),
+            list.map((item) => RDA.fromJson(item)).toList(),
+          );
         } else {
           throw Exception('Error occurred while getting RDA\'s');
         }
@@ -61,9 +102,7 @@ class RegisterFarmerService extends RegisterFarmerAbstractService {
   Future<List<Constituency>> getConstituency({
     required String region,
   }) async {
-    Uri uri = Uri.parse(domain + '');
-
-    Map<String, dynamic> body = {'region': region};
+    Uri uri = Uri.parse(domain + '/general/constituency/');
 
     try {
       http.Response response = await http.get(uri, headers: helper.headers);
@@ -75,7 +114,10 @@ class RegisterFarmerService extends RegisterFarmerAbstractService {
         if (res['success'] == 1) {
           List data = res['data'];
 
-          return data.map((item) => Constituency.fromJson(item)).toList();
+          return filterConstituency(
+            region,
+            data.map((item) => Constituency.fromJson(item)).toList(),
+          );
         } else {
           throw Exception('Error occurred while getting constituencies.');
         }
@@ -93,7 +135,7 @@ class RegisterFarmerService extends RegisterFarmerAbstractService {
     required String region,
     required String constituencyId,
   }) async {
-    Uri uri = Uri.parse(domain + '');
+    Uri uri = Uri.parse(domain + '/general/umpakatsi');
 
     try {
       http.Response response = await http.get(uri, headers: helper.headers);
@@ -179,7 +221,7 @@ class RegisterFarmerService extends RegisterFarmerAbstractService {
 
   @override
   Future<String> registerFarmer({required Map<String, dynamic> body}) async {
-    Uri uri = Uri.parse(domain + '');
+    Uri uri = Uri.parse(domain + '/universal/farmer_list_table');
 
     try {
       http.Response response = await http.post(uri,

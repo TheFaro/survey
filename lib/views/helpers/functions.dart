@@ -82,6 +82,7 @@ class Helpers {
     String? labelText,
   }) {
     double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
 
     return SizedBox(
       width: width * .7,
@@ -141,6 +142,94 @@ class Helpers {
                         ),
                       ));
                 }).toList(),
+                icon: const Icon(
+                  Icons.arrow_drop_down,
+                  color: Color.fromRGBO(17, 68, 131, 1),
+                  size: 30,
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget buildConstituencyDropdownField({
+    required BuildContext context,
+    required Constituency selectedValue,
+    required Function setState,
+    required List<Constituency> list,
+    TextStyle? helperStyle,
+    String? helperText,
+    String? labelText,
+  }) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+
+    return SizedBox(
+      width: width * .7,
+      child: FormField<Constituency>(
+        builder: (FormFieldState<Constituency> state) {
+          return InputDecorator(
+            decoration: InputDecoration(
+              helperText: helperText,
+              helperStyle: helperStyle,
+              labelText: labelText,
+              labelStyle:
+                  const TextStyle(color: Color.fromRGBO(17, 68, 131, 1)),
+              errorStyle: const TextStyle(
+                color: Colors.redAccent,
+                fontSize: 16,
+              ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(5),
+                borderSide: const BorderSide(
+                    width: 1.0, color: Color.fromRGBO(17, 68, 131, 1)),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(5),
+                borderSide: const BorderSide(
+                    width: 1.0, color: Color.fromRGBO(17, 68, 131, 1)),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: const BorderSide(
+                    width: 2.0, color: Color.fromRGBO(17, 68, 131, 1)),
+                borderRadius: BorderRadius.circular(5),
+              ),
+              errorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(5),
+                borderSide: BorderSide(width: 1.5, color: Colors.red.shade900),
+              ),
+            ),
+            isEmpty: selectedValue.inkhundla == "",
+            child: DropdownButtonHideUnderline(
+              child: DropdownButton<Constituency>(
+                value: selectedValue,
+                isDense: true,
+                onChanged: (Constituency? value) {
+                  // setState(() {
+                  //   selectedValue = value!;
+                  //   state.didChange(value);
+                  // });
+                  setState(value!);
+                  state.didChange(value);
+                },
+                items: list.map((Constituency value) {
+                  return DropdownMenuItem<Constituency>(
+                      value: value,
+                      child: Text(
+                        value.inkhundla,
+                        style: const TextStyle(
+                          color: Color.fromRGBO(17, 68, 131, 1),
+                        ),
+                      ));
+                }).toList(),
+                icon: const Icon(
+                  Icons.arrow_drop_down,
+                  color: Color.fromRGBO(17, 68, 131, 1),
+                  size: 30,
+                ),
               ),
             ),
           );

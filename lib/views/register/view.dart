@@ -293,6 +293,7 @@ class _RegisterState extends State<RegisterView> {
                           // email
                           SizedBox(
                             width: width * .7,
+                            height: height * .07,
                             child: Form(
                               key: _emailKey,
                               autovalidateMode:
@@ -358,6 +359,7 @@ class _RegisterState extends State<RegisterView> {
                           // phone
                           SizedBox(
                             width: width * .7,
+                            height: height * .07,
                             child: TextFormField(
                               controller: phone,
                               keyboardType: TextInputType.number,
@@ -401,6 +403,7 @@ class _RegisterState extends State<RegisterView> {
                           // gender
                           SizedBox(
                             width: width * .7,
+                            height: height * .07,
                             child: FormField<String>(
                               builder: (FormFieldState<String> state) {
                                 return InputDecorator(
@@ -477,6 +480,7 @@ class _RegisterState extends State<RegisterView> {
                           // designation
                           SizedBox(
                             width: width * .7,
+                            height: height * .07,
                             child: TextFormField(
                               controller: designation,
                               keyboardType: TextInputType.text,
@@ -520,6 +524,7 @@ class _RegisterState extends State<RegisterView> {
                           // level
                           SizedBox(
                             width: width * .7,
+                            height: height * .07,
                             child: TextFormField(
                               controller: level,
                               keyboardType: TextInputType.text,
@@ -564,6 +569,7 @@ class _RegisterState extends State<RegisterView> {
                           // password
                           SizedBox(
                             width: width * .7,
+                            height: height * .07,
                             child: TextFormField(
                               controller: password,
                               keyboardType: TextInputType.visiblePassword,
@@ -621,6 +627,7 @@ class _RegisterState extends State<RegisterView> {
                           // confirm password
                           SizedBox(
                             width: width * .7,
+                            height: height * .07,
                             child: TextFormField(
                               controller: confirmPassword,
                               obscureText: obscureText1,
@@ -686,30 +693,27 @@ class _RegisterState extends State<RegisterView> {
                           ),
 
                           // register button
-                          MaterialButton(
-                            textColor: Colors.white,
-                            color: const Color.fromRGBO(17, 68, 131, 1),
-                            onPressed: () {
-                              if (_emailKey.currentState!.validate()) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                        content: Text('Processing Data')));
-                              }
-                            },
-                            padding: EdgeInsets.only(
-                              left: width * 0.3,
-                              right: width * 0.3,
-                              top: 20,
-                              bottom: 20,
-                            ),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(5)),
-                            child: const Text(
-                              'Sign Up',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontWeight: FontWeight.w100,
-                                fontSize: 17,
+                          SizedBox(
+                            width: width * .7,
+                            child: MaterialButton(
+                              textColor: Colors.white,
+                              color: const Color.fromRGBO(17, 68, 131, 1),
+                              onPressed: () {
+                                if (_emailKey.currentState!.validate()) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                          content: Text('Processing Data')));
+                                }
+                              },
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5)),
+                              child: const Text(
+                                'Sign Up',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w100,
+                                  fontSize: 17,
+                                ),
                               ),
                             ),
                           ),

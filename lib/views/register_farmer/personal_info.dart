@@ -29,11 +29,11 @@ class _PersonalInfoState extends State<PersonalInfoView> {
   TextEditingController email = TextEditingController();
 
   // gender list
-  List<String> _genders = ["", "Female", "Male"];
+  final List<String> _genders = ["", "Female", "Male"];
   String _currentGender = "";
 
   // marital status list
-  List<String> _maritalStatusList = [
+  final List<String> _maritalStatusList = [
     "",
     "Single",
     "Married",
@@ -43,7 +43,7 @@ class _PersonalInfoState extends State<PersonalInfoView> {
   String _currentMaritalStatus = "";
 
   // level of education
-  List<String> _educationList = [
+  final List<String> _educationList = [
     "",
     "No Education",
     "Primary",
@@ -53,7 +53,7 @@ class _PersonalInfoState extends State<PersonalInfoView> {
   String _currentEducation = "";
 
   // region
-  List<String> _regionList = [
+  final List<String> _regionList = [
     "",
     "Lubombo",
     "Hhohho",
@@ -69,8 +69,11 @@ class _PersonalInfoState extends State<PersonalInfoView> {
 
   // select constituency
   late Future<List<String>> _futureConstituency;
-  List<String> _constituencyList = [""];
-  String _currentConstituency = "";
+  Constituency _currentConstituency = Constituency(
+      inkhundlaId: -1, inkhundlaCode: "", region: "", inkhundla: "");
+  late List<Constituency> _constituencyList = [
+    _currentConstituency,
+  ];
 
   // select umphakatsi
   late Future<List<String>> _futureUmphakatsi;
@@ -169,6 +172,9 @@ class _PersonalInfoState extends State<PersonalInfoView> {
   }
 
   Future<void> getRDAsFromService() async {
+    // re-initialize rda list
+    _RDAList = [""];
+
     // get RDA list
     service.getNearestRDA(region: _currentRegion).then((List<RDA> list) {
       List<String> temp = [];
@@ -186,17 +192,20 @@ class _PersonalInfoState extends State<PersonalInfoView> {
   }
 
   Future<void> getConstituencyList() async {
+    _constituencyList = [
+      Constituency(
+          inkhundlaId: -1, inkhundlaCode: '', region: "", inkhundla: ""),
+    ];
     service
         .getConstituency(region: _currentRegion)
         .then((List<Constituency> list) {
-      List<String> temp = [];
-      for (Constituency element in list) {
-        temp.add(element.inkhundla);
-      }
+      print(list.toString());
 
-      setState(() {
-        _constituencyList.insertAll(1, temp);
-      });
+      if (list.isNotEmpty) {
+        setState(() {
+          _constituencyList.insertAll(1, list);
+        });
+      }
     }).catchError((err) {
       helper.buildSnackBar(context, err.toString().replaceAll('Exception:', ''),
           Colors.red.shade400);
@@ -209,7 +218,7 @@ class _PersonalInfoState extends State<PersonalInfoView> {
     });
   }
 
-  void constituencyCallBack(String value) {
+  void constituencyCallBack(Constituency value) {
     setState(() {
       _currentConstituency = value;
     });
@@ -235,6 +244,7 @@ class _PersonalInfoState extends State<PersonalInfoView> {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -446,7 +456,7 @@ class _PersonalInfoState extends State<PersonalInfoView> {
                   Center(
                     child: helper.buildTextFormField(
                       context: context,
-                      controller: phoneNumber,
+                      controller: nextOfKinPhone,
                       labelText: 'Next of Kin Phone Number',
                       labelStyle: labelStyle,
                       textStyle: textStyle,
@@ -572,7 +582,7 @@ class _PersonalInfoState extends State<PersonalInfoView> {
 
                   // constituency
                   Center(
-                    child: helper.buildDropdownField(
+                    child: helper.buildConstituencyDropdownField(
                       context: context,
                       selectedValue: _currentConstituency,
                       list: _constituencyList,
@@ -614,13 +624,13 @@ class _PersonalInfoState extends State<PersonalInfoView> {
                   // next button
                   Center(
                     child: SizedBox(
-                      width: width * .65,
+                      width: width * .7,
+                      height: height * .07,
                       child: MaterialButton(
                         textColor: Colors.white,
                         color: const Color.fromRGBO(17, 68, 131, 1),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(5)),
-                        padding: const EdgeInsets.all(20),
                         child: const Text(
                           'Next',
                           textAlign: TextAlign.center,

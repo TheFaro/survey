@@ -91,6 +91,7 @@ class _LoginState extends State<LoginView> {
                       // email
                       SizedBox(
                         width: width * .7,
+                        height: height * .07,
                         child: Form(
                           key: _emailKey,
                           autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -153,6 +154,7 @@ class _LoginState extends State<LoginView> {
                       // password
                       SizedBox(
                         width: width * .7,
+                        height: height * .07,
                         child: TextFormField(
                           controller: password,
                           obscureText: obscureText,
@@ -224,84 +226,60 @@ class _LoginState extends State<LoginView> {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 80),
+                      const SizedBox(height: 40),
 
                       // login button
-                      MaterialButton(
-                        textColor: Colors.white,
-                        color: const Color.fromRGBO(17, 68, 131, 1),
-                        onPressed: () {
-                          setState(() {
-                            loading = true;
-                          });
-                          if (_emailKey.currentState!.validate()) {
-                            // Navigator.pushReplacement(
-                            //     context,
-                            //     PageTransition(
-                            //         child: EnumeratorHomeView(
-                            //             user: User(
-                            //           id: -1,
-                            //           nationalId: '9607196100302',
-                            //           name: 'Fanelesibonge',
-                            //           surname: 'Malaza',
-                            //           phone: '78221507',
-                            //           email: 'malazafanelesibonge@gmail.com ',
-                            //           gender: 'Male',
-                            //           designation: 'Enumerator',
-                            //           organization: 2,
-                            //           level: 2,
-                            //           verificationCode: "",
-                            //           status: "active",
-                            //         )),
-                            //         type: PageTransitionType
-                            //             .rightToLeftWithFade));
-
-                            // TODO: service
-                            service
-                                .loginRequest(
-                                    email: email.text, password: password.text)
-                                .then((Map<String, dynamic> res) {
-                              helper.buildSnackBar(
-                                  context, res['message'], Colors.green);
-
-                              setState(() {
-                                loading = false;
-                              });
-
-                              Navigator.pushReplacement(
-                                  context,
-                                  PageTransition(
-                                      child: EnumeratorHomeView(
-                                        user: res['user'],
-                                      ),
-                                      type: PageTransitionType
-                                          .rightToLeftWithFade));
-                            }).catchError((err) {
-                              setState(() {
-                                loading = false;
-                              });
-                              helper.buildSnackBar(
-                                context,
-                                err.toString().replaceAll("Exception:", ''),
-                                Colors.red.shade600,
-                              );
+                      SizedBox(
+                        width: width * .7,
+                        child: MaterialButton(
+                          textColor: Colors.white,
+                          color: const Color.fromRGBO(17, 68, 131, 1),
+                          onPressed: () {
+                            setState(() {
+                              loading = true;
                             });
-                          }
-                        },
-                        padding: EdgeInsets.only(
-                          left: width * 0.3,
-                          right: width * 0.3,
-                          top: 20,
-                          bottom: 20,
-                        ),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5)),
-                        child: const Text(
-                          'Log In',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w100,
-                            fontSize: 17,
+                            if (_emailKey.currentState!.validate()) {
+                              service
+                                  .loginRequest(
+                                      email: email.text,
+                                      password: password.text)
+                                  .then((Map<String, dynamic> res) {
+                                helper.buildSnackBar(
+                                    context, res['message'], Colors.green);
+
+                                setState(() {
+                                  loading = false;
+                                });
+
+                                Navigator.pushReplacement(
+                                    context,
+                                    PageTransition(
+                                        child: EnumeratorHomeView(
+                                          user: res['user'],
+                                        ),
+                                        type: PageTransitionType
+                                            .rightToLeftWithFade));
+                              }).catchError((err) {
+                                setState(() {
+                                  loading = false;
+                                });
+                                helper.buildSnackBar(
+                                  context,
+                                  err.toString().replaceAll("Exception:", ''),
+                                  Colors.red.shade600,
+                                );
+                              });
+                            }
+                          },
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5)),
+                          child: const Text(
+                            'Log In',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontWeight: FontWeight.w100,
+                              fontSize: 17,
+                            ),
                           ),
                         ),
                       ),

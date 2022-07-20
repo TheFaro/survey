@@ -32,6 +32,7 @@ abstract class AccessServiceAbstract {
   Future<String> resetPassword({required String password});
   Future<List<Organization>> getOrganizations();
   Future<int> getUserId();
+  Future<void> logout();
 }
 
 class AccessService extends AccessServiceAbstract {
@@ -315,5 +316,11 @@ class AccessService extends AccessServiceAbstract {
     } else {
       throw Exception('Id not found.');
     }
+  }
+
+  @override
+  Future<void> logout() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.clear();
   }
 }

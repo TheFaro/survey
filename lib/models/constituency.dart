@@ -18,10 +18,10 @@ class Constituency {
                 json['inkhundla_id'] == null
             ? -1
             : int.parse(json['inkhundla_id'].toString()),
-        inkhundlaCode:
-            json['inkhundla_code'].toString().isEmpty || json['inkhundla_code']
-                ? ""
-                : json['inkhundla_code'].toString(),
+        inkhundlaCode: json['inkhundla_code'].toString().isEmpty ||
+                json['inkhundla_code'] == null
+            ? ""
+            : json['inkhundla_code'].toString(),
         region: json['region'].toString().isEmpty || json['region'] == null
             ? ""
             : json['region'].toString(),

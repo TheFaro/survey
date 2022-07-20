@@ -10,9 +10,9 @@ class RDA {
   });
 
   factory RDA.fromJson(Map<String, dynamic> json) => RDA(
-        id: json['id'].toString().isEmpty || json['id'] == null
+        id: json['rda_id'].toString().isEmpty || json['rda_id'] == null
             ? -1
-            : int.parse(json['id'].toString()),
+            : int.parse(json['rda_id'].toString()),
         region: json['region'].toString().isEmpty || json['region'] == null
             ? ""
             : json['region'].toString(),

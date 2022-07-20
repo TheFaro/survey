@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:snau_survey/api/api.dart';
 import 'package:snau_survey/models/models.dart';
 import 'package:snau_survey/views/views.dart';
 
@@ -13,6 +14,8 @@ class EnumeratorHomeView extends StatefulWidget {
 }
 
 class _EnumeratorHomeState extends State<EnumeratorHomeView> {
+  AccessService accessService = AccessService();
+
   @override
   void initState() {
     super.initState();
@@ -199,8 +202,52 @@ class _EnumeratorHomeState extends State<EnumeratorHomeView> {
                       ),
                     ),
                   ),
+                  const SizedBox(height: 25),
 
-                  // TODO: View Survey
+                  // logout
+                  Center(
+                    child: GestureDetector(
+                      onTap: () {
+                        accessService.logout().then(
+                              (value) => Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => const LoginView()),
+                                  (route) => false),
+                            );
+                      },
+                      child: Card(
+                        elevation: 10,
+                        child: Container(
+                          width: width * .5,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          padding: const EdgeInsets.all(12),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: const [
+                              Icon(
+                                Icons.logout,
+                                color: Colors.black,
+                              ),
+                              SizedBox(width: 30),
+                              Text(
+                                'Logout',
+                                textAlign: TextAlign.start,
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
                 ]),
           ),
         ),
